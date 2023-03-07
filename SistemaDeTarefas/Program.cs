@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SistemaDeTarefas.Data;
 using SistemaDeTarefas.Repositorios;
 using SistemaDeTarefas.Repositorios.Interfaces;
+using Pomelo.EntityFrameworkCore.MySql;
 
 namespace SistemaDeTarefas
 {
@@ -18,10 +19,8 @@ namespace SistemaDeTarefas
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddEntityFrameworkSqlServer().
-                AddDbContext<SistemaTarefasDBContex>(
-                options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database"))
-                );
+            string? connectionString = builder.Configuration.GetConnectionString("SistemaDeTarefas");
+            builder.Services.AddDbContext<SistemaTarefasDBContex>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
